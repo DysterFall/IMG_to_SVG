@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1193" height="1026">
+  <g id="head" fill="rgb(255, 0, 0)">
+  </g>
+  <g id="left_arm" fill="rgb(0, 255, 0)">
+  </g>
+  <g id="right_arm" fill="rgb(0, 0, 255)">
+  </g>
+  <g id="torso" fill="rgb(255, 255, 0)">
+  </g>
+  <g id="left_leg" fill="rgb(255, 0, 255)">
+  </g>
+  <g id="right_leg" fill="rgb(0, 255, 255)">
+  </g>
+</svg>
