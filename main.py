@@ -23,51 +23,37 @@ def image_to_svg_with_parts(image_path, output_path):
     # Initialiser le contenu SVG
     svg_content = f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}">\n'
 
-    # Fonction pour regrouper les pixels adjacents en zones
-    def find_contiguous_regions(image, target_color):
+    # Fonction pour regrouper les pixels contigus en rectangles
+    def find_contiguous_rectangles(image, target_color):
         visited = set()
-        regions = []
+        rectangles = []
 
         for y in range(height):
+            x_start = None
             for x in range(width):
-                if (x, y) not in visited and image.getpixel((x, y)) == target_color:
-                    stack = [(x, y)]
-                    region = []
+                if image.getpixel((x, y)) == target_color and (x, y) not in visited:
+                    if x_start is None:
+                        x_start = x
+                    visited.add((x, y))
 
-                    while stack:
-                        cx, cy = stack.pop()
-                        if (cx, cy) not in visited and image.getpixel((cx, cy)) == target_color:
-                            visited.add((cx, cy))
-                            region.append((cx, cy))
+                if (image.getpixel((x, y)) != target_color or x == width - 1) and x_start is not None:
+                    x_end = x if image.getpixel((x, y)) != target_color else x + 1
+                    rectangles.append((x_start, y, x_end - x_start, 1))  # Rectangle (x, y, width, height)
+                    x_start = None
 
-                            # Ajouter les pixels voisins
-                            if cx > 0: stack.append((cx - 1, cy))
-                            if cx < width - 1: stack.append((cx + 1, cy))
-                            if cy > 0: stack.append((cx, cy - 1))
-                            if cy < height - 1: stack.append((cx, cy + 1))
-
-                    regions.append(region)
-
-        return regions
-
-    # Fonction pour convertir une région en un chemin SVG (path)
-    def region_to_path(region):
-        path_data = []
-        for x, y in region:
-            path_data.append(f"M{x} {y}h1v1h-1z")
-        return " ".join(path_data)
+        return rectangles
 
     # Parcourir les parties du corps
     for part, color in body_parts.items():
         svg_content += f'  <g id="{part}" fill="rgb{color}">\n'
 
-        # Trouver les régions contiguës pour la couleur cible
-        regions = find_contiguous_regions(img, color)
+        # Trouver les rectangles contigus pour la couleur cible
+        rectangles = find_contiguous_rectangles(img, color)
 
-        # Ajouter les régions au SVG sous forme de chemins
-        for region in regions:
-            path_data = region_to_path(region)
-            svg_content += f'    <path d="{path_data}" />\n'
+        # Ajouter les rectangles au SVG
+        for rect in rectangles:
+            x, y, w, h = rect
+            svg_content += f'    <rect x="{x}" y="{y}" width="{w}" height="{h}" fill="rgb{color}" />\n'
 
         svg_content += '  </g>\n'
 
