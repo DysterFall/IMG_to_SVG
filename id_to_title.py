@@ -24,14 +24,11 @@ def modify_svg(svg_file, output_file):
         # Récupérer l'ancien ID
         old_id = element.attrib['id']
 
-        # Créer un nouvel ID numérique
+        # Ajouter l'ancien ID en tant qu'attribut `title`
+        element.set('title', old_id)
+
+        # Remplacer l'ancien ID par un nouvel ID unique
         new_id = f"id_{id_counter}"
-
-        # Ajouter un élément <title> avec l'ancien ID
-        title = ET.SubElement(element, "title")
-        title.text = old_id
-
-        # Remplacer l'ancien ID par le nouvel ID
         element.set('id', new_id)
 
         # Incrémenter le compteur
