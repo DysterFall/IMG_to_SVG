@@ -27,12 +27,14 @@ def modify_svg(svg_file, output_file):
         # Ajouter l'ancien ID en tant qu'attribut `title`
         element.set('title', old_id)
 
-        # Remplacer l'ancien ID par un nouvel ID unique
-        new_id = f"id_{id_counter}"
-        element.set('id', new_id)
+        # Vérifier si l'ID doit rester inchangé (par exemple, "banane")
+        if old_id != "banane":
+            # Remplacer l'ancien ID par un nouvel ID unique
+            new_id = f"id_{id_counter}"
+            element.set('id', new_id)
 
-        # Incrémenter le compteur
-        id_counter += 1
+            # Incrémenter le compteur
+            id_counter += 1
 
     # Sauvegarder les modifications dans un nouveau fichier
     tree.write(output_file, encoding="utf-8", xml_declaration=True)
@@ -40,4 +42,4 @@ def modify_svg(svg_file, output_file):
 
 
 # Exemple d'utilisation
-modify_svg("./images/human_body.svg", "./svg_clean/output.svg")
+modify_svg("./images/svg_test.svg", "./svg_clean/output.svg")
