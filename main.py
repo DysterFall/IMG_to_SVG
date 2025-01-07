@@ -68,7 +68,7 @@ def image_to_svg_with_parts(image_path, output_path):
 
 # Chemin de l'image et du fichier SVG de sortie
 image_path = './images/test.png'
-output_path = './svg_output/test_optimized.svg'
+output_path = 'svg_clean/output.svg'
 
 # Appeler la fonction
 image_to_svg_with_parts(image_path, output_path)
